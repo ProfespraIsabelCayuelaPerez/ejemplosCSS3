@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Variables CSS – Starter + Spinner</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #0f172a;
+        --brand: #2563eb;
+        --space: 1rem;
+        /* Sugerencia: deja que el UA adapte controles/scrollbars a claro/oscuro */
+        color-scheme: light dark;
+      }
+
+      /* Tema oscuro según preferencia del sistema */
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f172a;
+          --fg: #e2e8f0;
+        }
+      }
+
+      body {
+        margin: 0;
+        font: 16px/1.5 system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+      }
+      header,
+      main {
+        padding: var(--space);
+      }
+
+      .btn {
+        --btn-bg: var(--brand);
+        --btn-fg: #fff;
+        padding: 0.5rem 0.875rem;
+        border-radius: 0.5rem;
+        border: 0;
+        background: var(--btn-bg);
+        color: var(--btn-fg);
+        cursor: pointer;
+      }
+
+      .theme-verde {
+        --brand: #10b981;
+      }
+      .theme-rojo {
+        --brand: #ef4444;
+      }
+
+      /* 1) Registro de propiedades personalizadas tipadas */
+      @property --angulo {
+        syntax: "<angle>";
+        inherits: false;
+        initial-value: 0deg;
+      }
+
+      @property --spinner-size {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 2.5rem;
+      }
+
+      /* 2) Uso y transición de variables registradas */
+      .spinner {
+        /* Tokens locales del componente */
+        --angulo: 0deg; /* valor inicial del giro */
+        --spinner-size: 2.5rem; /* tamaño parametrizable */
+
+        width: var(--spinner-size);
+        height: var(--spinner-size);
+        display: inline-grid;
+        place-items: center;
+        /* Fallback primero (si color-mix no está soportado, al menos hay borde): */
+        border: 0.35rem solid var(--brand);
+        /* Override con mezcla si está disponible: */
+        border-color: color-mix(in oklab, var(--brand), #000 10%);
+        border-top-color: transparent;
+        border-radius: 50%;
+        transform: rotate(var(--angulo));
+        transition: --angulo 300ms linear, --spinner-size 200ms ease; /* transición de las custom properties */
+        background: none;
+      }
+      .spinner:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 4px;
+      }
+      .spinner:is(:hover, :focus-visible) {
+        --angulo: 90deg; /* al interactuar, cambia el token -> se anima */
+        --spinner-size: 3rem;
+      }
+
+      /* Demo alternativa: giro continuo por animación clásica */
+      .spinner.auto {
+        animation: giro 1.5s linear infinite;
+      }
+      @keyframes giro {
+        to {
+          transform: rotate(1turn);
+        }
+      }
+
+      /* Respeto a usuarios con reducción de movimiento */
+      @media (prefers-reduced-motion: reduce) {
+        .spinner {
+          transition: none;
+          animation: none;
+        }
+      }
+
+      /* Layout de la hilera de spinners */
+      .row {
+        display: flex;
+        gap: var(--space);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button class="btn" id="t-verde" type="button">Verde</button>
+      <button class="btn" id="t-rojo" type="button">Rojo</button>
+    </header>
+    <main>
+      <h1>Demo de variables CSS</h1>
+      <p>
+        Cambia el tema con los botones. Pasa el ratón o enfoca los spinners.
+      </p>
+
+      <div class="row">
+        <!-- Botones usados como spinners para que sean focusables y accesibles -->
+        <button
+          class="spinner"
+          type="button"
+          aria-label="Spinner interactivo"
+          title="Hover o foco: gira 90º"
+        ></button>
+        <button
+          class="spinner auto"
+          type="button"
+          aria-label="Spinner automático"
+          title="Giro continuo"
+        ></button>
+      </div>
+    </main>
+    <script>
+      const body = document.body;
+      document.getElementById("t-verde").onclick = () => {
+        body.classList.remove("theme-rojo");
+        body.classList.add("theme-verde");
+      };
+      document.getElementById("t-rojo").onclick = () => {
+        body.classList.remove("theme-verde");
+        body.classList.add("theme-rojo");
+      };
+    </script>
+  </body>
+</html>

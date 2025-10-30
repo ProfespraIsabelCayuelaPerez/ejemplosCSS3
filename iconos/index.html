@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Demo de iconos por CDN</title>
+
+    <!-- 1) Font Awesome (Solid + Brands, free) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"
+    />
+
+    <!-- 2) Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <!-- 3) Material Symbols (Google) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+
+    <!-- 4) Iconify (agregador de cientos de sets) -->
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+    <style>
+      :root {
+        --gap: 14px;
+        --size: 26px;
+      }
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          sans-serif;
+        margin: 2rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: var(--gap);
+        align-items: center;
+      }
+      .card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .card i,
+      .card .material-symbols-outlined,
+      .card iconify-icon,
+      .card img {
+        font-size: var(--size);
+        width: var(--size);
+        height: var(--size);
+      }
+      /* Material Symbols requiere ajuste de tamaño por font-size */
+      .material-symbols-outlined {
+        font-variation-settings: "OPSZ" 24;
+      }
+
+      /* Utilidad accesible: texto solo para lectores de pantalla */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        margin-top: 1rem;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background: #fafafa;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Iconos por CDN — Ejemplos</h1>
+
+    <section class="grid" aria-label="Galería de iconos">
+      <!-- Font Awesome -->
+      <div class="card">
+        <i class="fa-solid fa-music" aria-hidden="true"></i>
+        <span>Font Awesome: <code>fa-solid fa-music</code></span>
+      </div>
+
+      <!-- Bootstrap Icons -->
+      <div class="card">
+        <i class="bi bi-music-note-beamed" aria-hidden="true"></i>
+        <span>Bootstrap Icons: <code>bi bi-music-note-beamed</code></span>
+      </div>
+
+      <!-- Material Symbols -->
+      <div class="card">
+        <span class="material-symbols-outlined" aria-hidden="true"
+          >music_note</span
+        >
+        <span>Material Symbols: <code>music_note</code></span>
+      </div>
+
+      <!-- Iconify (ejemplo usando set MDI) -->
+      <div class="card">
+        <iconify-icon icon="mdi:music" aria-hidden="true"></iconify-icon>
+        <span>Iconify (MDI): <code>mdi:music</code></span>
+      </div>
+
+      <!-- Logos de marca vía Simple Icons (SVG desde CDN) -->
+      <div class="card">
+        <img
+          src="https://cdn.simpleicons.org/spotify"
+          alt="Spotify"
+          width="26"
+          height="26"
+        />
+        <span
+          >Simple Icons (SVG): <code>cdn.simpleicons.org/spotify</code></span
+        >
+      </div>
+    </section>
+
+    <h2 style="margin-top: 2rem">Accesibilidad: decorativo vs significativo</h2>
+    <p>
+      Si el icono es <strong>decorativo</strong> ⇒ usa
+      <code>aria-hidden="true"</code>. Si tiene <strong>significado</strong>,
+      incluye texto visible o una etiqueta accesible.
+    </p>
+
+    <div class="toolbar">
+      <!-- Decorativo (solo adorno): aria-hidden -->
+      <button class="btn" type="button">
+        <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
+        Reproducir
+      </button>
+
+      <!-- Solo icono, con etiqueta accesible -->
+      <button class="btn" type="button" aria-label="Pausar reproducción">
+        <i class="fa-solid fa-circle-pause" aria-hidden="true"></i>
+        <span class="sr-only">Pausar</span>
+      </button>
+
+      <!-- Icono + texto visible (lo más claro) -->
+      <button class="btn" type="button">
+        <i class="bi bi-skip-forward-fill" aria-hidden="true"></i>
+        Siguiente
+      </button>
+    </div>
+
+    <p style="margin-top: 1rem">
+      Consejo: por rendimiento, conserva <em>solo</em> la(s) librería(s) que
+      vayas a usar en tu proyecto.
+    </p>
+  </body>
+</html>
