@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Variables CSS – Starter + Spinner</title>
+    <title>Variables CSS: alcance y temas</title>
     <style>
+      /* :root selecciona <html>. Sus variables se heredan en toda la página. */
       :root {
         --bg: #ffffff;
         --fg: #0f172a;
         --brand: #2563eb;
         --space: 1rem;
-        /* Sugerencia: deja que el UA adapte controles/scrollbars a claro/oscuro */
-        color-scheme: light dark;
+        color-scheme: light;
       }
 
       /* Tema oscuro según preferencia del sistema */
@@ -19,7 +19,21 @@
         :root {
           --bg: #0f172a;
           --fg: #e2e8f0;
+          color-scheme: dark;
         }
+      }
+
+      /* El selector con atributo tiene prioridad sobre :root. */
+      :root[data-tema="claro"] {
+        --bg: #ffffff;
+        --fg: #0f172a;
+        color-scheme: light;
+      }
+
+      :root[data-tema="oscuro"] {
+        --bg: #0f172a;
+        --fg: #e2e8f0;
+        color-scheme: dark;
       }
 
       body {
@@ -33,6 +47,7 @@
         padding: var(--space);
       }
 
+      /* Variables locales de cada elemento .btn. */
       .btn {
         --btn-bg: var(--brand);
         --btn-fg: #fff;
@@ -44,11 +59,15 @@
         cursor: pointer;
       }
 
+      .muestra {
+        cursor: auto;
+      }
+
       .theme-verde {
-        --brand: #10b981;
+        --brand: #047857;
       }
       .theme-rojo {
-        --brand: #ef4444;
+        --brand: #b91c1c;
       }
 
       /* 1) Registro de propiedades personalizadas tipadas */
@@ -61,7 +80,7 @@
       @property --spinner-size {
         syntax: "<length>";
         inherits: false;
-        initial-value: 2.5rem;
+        initial-value: 40px;
       }
 
       /* 2) Uso y transición de variables registradas */
@@ -105,7 +124,8 @@
 
       /* Respeto a usuarios con reducción de movimiento */
       @media (prefers-reduced-motion: reduce) {
-        .spinner {
+        .spinner,
+        .spinner.auto {
           transition: none;
           animation: none;
         }
@@ -121,16 +141,32 @@
     </style>
   </head>
   <body>
-    <header>
+    <header class="row">
+      <label for="tema">Tema</label>
+      <select id="tema">
+        <option value="">Sistema</option>
+        <option value="claro">Claro</option>
+        <option value="oscuro">Oscuro</option>
+      </select>
+      <span>Acento</span>
       <button class="btn" id="t-verde" type="button">Verde</button>
       <button class="btn" id="t-rojo" type="button">Rojo</button>
     </header>
     <main>
       <h1>Demo de variables CSS</h1>
       <p>
-        Cambia el tema con los botones. Pasa el ratón o enfoca los spinners.
+        Elige Claro u Oscuro para cambiar el fondo y el texto. Con Sistema,
+        la página sigue la preferencia de tu dispositivo.
       </p>
 
+      <p>
+        Prueba los acentos Verde y Rojo. La muestra conserva su fondo
+        porque define su propio <code>--btn-bg</code>.
+      </p>
+      <p><span class="btn muestra" style="--btn-bg: #6d28d9">Muestra violeta</span></p>
+
+      <h2>Variables locales en los indicadores</h2>
+      <p>Pasa el ratón o usa Tab para cambiar el tamaño y el giro del primer indicador.</p>
       <div class="row">
         <!-- Botones usados como spinners para que sean focusables y accesibles -->
         <button
@@ -148,6 +184,17 @@
       </div>
     </main>
     <script>
+      const raiz = document.documentElement;
+      const selectorTema = document.getElementById("tema");
+
+      selectorTema.addEventListener("change", () => {
+        if (selectorTema.value) {
+          raiz.dataset.tema = selectorTema.value;
+        } else {
+          delete raiz.dataset.tema;
+        }
+      });
+
       const body = document.body;
       document.getElementById("t-verde").onclick = () => {
         body.classList.remove("theme-rojo");
